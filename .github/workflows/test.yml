@@ -1,12 +1,12 @@
-name: Train Model
+name: Run Tests
 
 on:
   push:
     branches:
-      - classification-branch
+      - test_branch
 
 jobs:
-  train:
+  test:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -20,12 +20,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
+        pip install pytest
 
-    - name: Run training script
-      run: python src/train.py
-
-    - name: Upload trained model artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: trained-model
-        path: model_train.pkl
+    - name: Run Pytest suite
+      run: pytest tests/

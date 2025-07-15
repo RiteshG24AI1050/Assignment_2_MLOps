@@ -2,8 +2,8 @@ numpy
 matplotlib
 statsmodels
 scikit-learn
-scikit-learn
+joblib
+pytest
 pandas
 scipy==1.11.4
 statsmodels==0.14.0
-joblib
