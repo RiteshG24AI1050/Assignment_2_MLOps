@@ -76,4 +76,4 @@ jobs:
         path: . # Download to the current directory
 
     - name: Run inference script
-      run: python src/inference.py
+      run: python -m src.inference
