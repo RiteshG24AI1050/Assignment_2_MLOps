@@ -3,7 +3,7 @@ name: MLOps Pipeline - Test, Train, Inference
 on:
   push:
     branches:
-      - inference-branch
+      - inference_branch
 
 jobs:
   test_cases_job:
