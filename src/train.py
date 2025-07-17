@@ -4,28 +4,31 @@ from sklearn.datasets import load_digits
 from sklearn.linear_model import LogisticRegression
 import os
 
-# src/train.py (modified to use utils.py)
+import json # Still needed for json.dump in the __main__ block for default config creation
 import joblib
 from sklearn.linear_model import LogisticRegression
 import os
-# Import functions from your new utils.py
-from utils import load_config, load_data # type: ignore
+# Import from your utils.py: load_config, load_data, and the DEFAULT_CONFIG_PARAMS
+from utils import load_config, load_data, DEFAULT_CONFIG_PARAMS
 
 def train_model(config_path="config/config.json", model_output_path="model_train.pkl"):
     """
     Loads the digits dataset, reads hyperparameters from config.json,
     trains a LogisticRegression model, and saves it.
+    Args:
+        config_path (str): Path to the configuration JSON file.
+        model_output_path (str): Path to save the trained model.
     """
-    # Use the utility function to load config
+    # Use the utility function to load config (which now includes validation)
     config = load_config(config_path)
 
     # Use the utility function to load data
     X, y = load_data()
 
-    # Extract hyperparameters
-    C = config.get("C", 1.0)
-    solver = config.get("solver", "lbfgs")
-    max_iter = config.get("max_iter", 1000)
+    # Extract hyperparameters directly. No defaults here, as load_config ensures their presence and type.
+    C = config["C"]
+    solver = config["solver"]
+    max_iter = config["max_iter"]
 
     print(f"Training with C={C}, solver={solver}, max_iter={max_iter}")
 
@@ -38,10 +41,16 @@ def train_model(config_path="config/config.json", model_output_path="model_train
     print(f"Model trained and saved to {model_output_path}")
 
 if __name__ == "__main__":
-    # This part remains the same for creating config if not exists
-    os.makedirs('config', exist_ok=True)
-    if not os.path.exists("config/config.json"):
-        with open("config/config.json", "w") as f:
-            json.dump({"C": 1.0, "solver": "lbfgs", "max_iter": 100}, f)
+    config_dir = "config"
+    config_file_path = os.path.join(config_dir, "config.json")
 
-    train_model()
+    os.makedirs(config_dir, exist_ok=True) 
+
+    if not os.path.exists(config_file_path):
+        
+        with open(config_file_path, "w") as f:
+            json.dump(DEFAULT_CONFIG_PARAMS, f, indent=4) 
+        print(f"Created default config file at {config_file_path} using DEFAULT_CONFIG_PARAMS from utils.")
+
+   
+    train_model(config_path=config_file_path)
