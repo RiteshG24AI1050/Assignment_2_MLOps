@@ -9,7 +9,7 @@ import joblib
 from sklearn.linear_model import LogisticRegression
 import os
 # Import from your utils.py: load_config, load_data, and the DEFAULT_CONFIG_PARAMS
-from utils import load_config, load_data, DEFAULT_CONFIG_PARAMS
+from .utils import load_config, load_data, DEFAULT_CONFIG_PARAMS
 
 def train_model(config_path="config/config.json", model_output_path="model_train.pkl"):
     """
